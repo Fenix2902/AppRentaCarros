@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "744834714382",
+    "project_id": "rentacarros-fb1c4",
+    "storage_bucket": "rentacarros-fb1c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744834714382:android:74028daf388e21940fe55f",
+        "android_client_info": {
+          "package_name": "com.example.rentacarros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744834714382-f2mmdl4dd0aegqsutf425r77drg2j0o1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsgrb6i-IYidSIZ9jknpxtJtN4GAFZqd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744834714382-f2mmdl4dd0aegqsutf425r77drg2j0o1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
