@@ -68,7 +68,7 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
                                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override
                                                         public void onSuccess(DocumentReference documentReference) {
-                                                            Toast.makeText(getApplicationContext(), "Usuario creado correctamente con ID "+ documentReference.getId(), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "Usuario creado correctamente", Toast.LENGTH_SHORT).show();
                                                             //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                                         }
                                                     })

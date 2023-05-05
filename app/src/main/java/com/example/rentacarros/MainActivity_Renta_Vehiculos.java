@@ -62,6 +62,19 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 if (task.getResult().size() > 0) {
+
+                                                    task.getResult().getDocuments().get(0).getReference().update("estado", false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            Toast.makeText(MainActivity_Renta_Vehiculos.this, "Se actualizo el estado del vehículo!!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(MainActivity_Renta_Vehiculos.this, "No se actualizo el estado del vehículo!!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
                                                     db.collection("Rentas").whereEqualTo("renta", etnumrenta.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -73,10 +86,11 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                                                                     renta.put("placa", etnumplaca.getText().toString());
                                                                     renta.put("fecha", etfecha.getText().toString());
                                                                     limpiar();
+
                                                                     db.collection("Rentas").add(renta).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                         @Override
                                                                         public void onSuccess(DocumentReference documentReference) {
-                                                                            Toast.makeText(getApplicationContext(), "Renta ingresada correctamente con la identificacion: " + documentReference.getId(), Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(getApplicationContext(), "Renta ingresada correctamente ", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     }).addOnFailureListener(new OnFailureListener() {
                                                                         @Override
@@ -91,10 +105,10 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                                                         }
                                                     });
                                                 } else {
-                                                    Toast.makeText(getApplicationContext(), "Placa no disponible o el automovil no esta disponible", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getApplicationContext(), "Placa no disponible", Toast.LENGTH_SHORT).show();
                                                 }
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Placa no disponible o el automovil no esta disponible", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "Placa no disponible", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
