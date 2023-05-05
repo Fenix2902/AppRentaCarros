@@ -64,10 +64,11 @@ public class MainActivity_Registrar_Vehiculos extends AppCompatActivity {
                                             Map<String, Object> vehiculo = new HashMap<>();
                                             vehiculo.put("placa",etplaca.getText().toString());
                                             vehiculo.put("marca",etmarca.getText().toString());
+                                            limpiar();
 
                                             // Obtener el estado del Switch y agregarlo al objeto Map
                                             boolean isChecked = swdisponible.isChecked();
-                                            vehiculo.put("switchValue", isChecked);
+                                            vehiculo.put("estado", isChecked);
 
                                             // Agregar un nuevo documento con un ID generado automáticamente
                                             db.collection("Vehiculos")
@@ -105,5 +106,9 @@ public class MainActivity_Registrar_Vehiculos extends AppCompatActivity {
             }
         });
 
+    }
+    private void limpiar() {
+        etplaca.setText("");
+        etmarca.setText("");
     }
 }

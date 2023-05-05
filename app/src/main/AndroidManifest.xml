@@ -15,7 +15,7 @@
             android:name=".MainActivity_Renta_Vehiculos"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivity_Registrar_Vehiculos"
             android:exported="false" />
         <activity
             android:name=".MainActivity_Opciones_de_Registro"
@@ -24,7 +24,7 @@
             android:name=".MainActivity_Registrar_Usuario"
             android:exported="false" />
         <activity
-            android:name=".MainActivity_Registrar_Vehiculos"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

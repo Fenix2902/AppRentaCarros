@@ -21,6 +21,7 @@ public class MainActivity_Opciones_de_Registro extends AppCompatActivity {
 
         btnRentar = findViewById(R.id.btnRentarVehiculo);
         btnRegistrar_Vehiculo = findViewById(R.id.btnRegVehiculo);
+        btnVolverInic = findViewById(R.id.btnVolverInicio);
 
         btnRegistrar_Vehiculo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,7 +40,7 @@ public class MainActivity_Opciones_de_Registro extends AppCompatActivity {
         btnVolverInic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 

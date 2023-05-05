@@ -1,5 +1,6 @@
 package com.example.rentacarros;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,9 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 public class MainActivity extends AppCompatActivity {
 
-    EditText etUsername, etName, etPassword;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    EditText etUsername, etPassword;
     Button btnIniciar, btnRegistrar;
 
     @Override
@@ -21,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         etUsername = findViewById(R.id.etUsername);
-        etName = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
 
         btnIniciar = findViewById(R.id.btnIniciar);
@@ -36,5 +43,33 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),MainActivity_Registrar_Usuario.class));//permite ir a otra pagina
             }
         });
+
+        btnIniciar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!etUsername.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()) {
+                    db.collection("users").whereEqualTo("username", etUsername.getText().toString())
+                            .whereEqualTo("password", etPassword.getText().toString()).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if (task.getResult().size() > 0) {
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity_Opciones_de_Registro.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Acceso de sesión no exitoso", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(MainActivity.this, "Acceso de sesión no exitoso", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(MainActivity.this, "Ingresa todos los campos para iniciar sesion!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 }

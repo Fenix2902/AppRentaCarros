@@ -60,6 +60,7 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
                                             user.put("name",etName.getText().toString());
                                             user.put("username",etUsername.getText().toString());
                                             user.put("password",etPassword.getText().toString());
+                                            limpiar();
 
                                             // Add a new document with a generated ID
                                             db.collection("users")
@@ -96,5 +97,10 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
             }
         });
 
+    }
+    private void limpiar() {
+        etUsername.setText("");
+        etName.setText("");
+        etPassword.setText("");
     }
 }
