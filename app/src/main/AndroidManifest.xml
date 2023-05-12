@@ -12,6 +12,12 @@
         android:theme="@style/Theme.RentaCarros"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity_userItem"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity_UsersList"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity_Renta_Vehiculos"
             android:exported="false" />
         <activity

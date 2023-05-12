@@ -3,6 +3,7 @@ package com.example.rentacarros;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,8 +27,9 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText etUsername, etName, etPassword;
-    Button btnVolverLogin, btnSave;
+    Button btnVolverLogin, btnSave,btnListarUsers;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,14 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
         etPassword = findViewById(R.id.etpassword);
         btnSave = findViewById(R.id.btnSaveUser);
         btnVolverLogin = findViewById(R.id.btnRegresarLogin);
+        btnListarUsers = findViewById(R.id.btnListUsers);
+
+        btnListarUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),MainActivity_UsersList.class));
+            }
+        });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,0 +1,246 @@
+1. Agregar implementación de RecyclerView y CardView- Project Structure
+2. Agregar RecyclerView y textview (opcional para titulo)
+
+--- activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recuserlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="111dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+3. Agregar un componente Layout Resource File (user_item, por ejemplo) para mostrar la información
+   en el recyclerview, con los views necesarios.
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardCornerRadius="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="5dp"
+        android:elevation="2dp"
+        app:cardBackgroundColor="#F1FBFB"
+        >
+
+        <LinearLayout
+            android:layout_width="1004dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/etimagen"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_baseline_account_box_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/etname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Nombre" />
+
+                <TextView
+                    android:id="@+id/etemail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Correo" />
+
+                <TextView
+                    android:id="@+id/etmobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Teléfono" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
+
+4. Crear una clase para los datos del recyclerview (name, email, mobile) con sus respectivos get y set.
+
+public class user {
+    String name;
+    String email;
+    String mobile;
+
+    public user() {
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+5.1. Crear una clase para el adaptador del RecyclerView (userAdapter, por ejemplo):
+
+package com.example.apprecyclercardviewfbfs;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+public class userAdapter extends RecyclerView.Adapter<userAdapter.userViewHolder>{
+    ArrayList<user> userList;
+    @NonNull
+    @Override
+    public userAdapter.userViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item,null,false);
+        return new userViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull userAdapter.userViewHolder holder, int position) {
+        holder.name.setText(userList.get(position).getName().toString());
+        holder.email.setText(userList.get(position).getEmail().toString());
+        holder.mobile.setText(userList.get(position).getMobile().toString());
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return userList.size();
+    }
+
+    public class userViewHolder extends RecyclerView.ViewHolder {
+        TextView name,email,mobile;
+        public userViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.etname);
+            email = itemView.findViewById(R.id.etemail);
+            mobile = itemView.findViewById(R.id.etmobile);
+        }
+    }
+
+    public userAdapter(ArrayList<user> userList) {
+        this.userList = userList;
+    }
+}
+
+
+
+6. En el archivo de java (correspondiente al archivo xml - MainActivity.java), crear una lista igual al
+    del adaptador y referenciar el recyclerview (recycler, por ejemplo). Además,
+    la forma de mostrar los datos en el recycler:
+
+package com.example.apprecyclercardviewfbfs;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+    RecyclerView userRecycler;
+    ArrayList<user> userLists;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        userRecycler = findViewById(R.id.recuserlist);
+        userLists = new ArrayList<>();
+        userRecycler.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+        userRecycler.setHasFixedSize(true);
+        // Cargar datos de Firebase - Firestore
+        loadUsers();
+    }
+
+    private void loadUsers() {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.w("Datos", document.getId() + " => " + document.getData());
+                                //
+                                user ouser = new user();
+                                ouser.setName(document.getString("name"));
+                                ouser.setEmail(document.getString("email"));
+                                ouser.setMobile(document.getString("mobile"));
+                                userLists.add(ouser);
+                                //
+                            }
+                            userAdapter auser=new userAdapter(userLists);
+                            userRecycler.setAdapter(auser);
+                        } else {
+                            Log.w("", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+    }
+}
+
+7.Ejecutar desde el emulador...
