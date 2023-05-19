@@ -68,36 +68,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="100dp"
         android:text="Regresar Login"
         android:textAlignment="center"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etpassword" />
+        app:layout_constraintTop_toBottomOf="@+id/switchRole" />
 
     <Button
         android:id="@+id/btnSaveUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="100dp"
         android:text="Guardar"
         android:textAlignment="center"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toEndOf="@+id/btnRegresarLogin"
-        app:layout_constraintTop_toBottomOf="@+id/etpassword" />
+        app:layout_constraintTop_toBottomOf="@+id/switchRole" />
 
     <Button
         android:id="@+id/btnListUsers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="12dp"
         android:text="Listar Usuarios"
         android:textAlignment="center"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnRegresarLogin" />
+
+    <Switch
+        android:id="@+id/switchRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Invit/Admin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etpassword" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textreserv"
+        android:layout_width="266dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:hint="ReservWord"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchRole">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etreservword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

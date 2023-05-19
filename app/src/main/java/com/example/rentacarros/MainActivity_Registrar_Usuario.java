@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,8 +27,9 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    EditText etUsername, etName, etPassword;
+    EditText etUsername, etName, etPassword,etreservword;
     Button btnVolverLogin, btnSave,btnListarUsers;
+    Switch swAdmin;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -42,6 +44,8 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSaveUser);
         btnVolverLogin = findViewById(R.id.btnRegresarLogin);
         btnListarUsers = findViewById(R.id.btnListUsers);
+        etreservword = findViewById(R.id.etreservword);
+        swAdmin = findViewById(R.id.switchRole);
 
         btnListarUsers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +58,7 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Verificar que el nombre del usuario se haya digitado
-                if (!etName.getText().toString().isEmpty() && !etUsername.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()){
+                if (!etName.getText().toString().isEmpty() && !etUsername.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty() && !etreservword.getText().toString().isEmpty()){
                     //Busqueda de usuario en la coleccion users
                     db.collection("users")
                             .whereEqualTo("username",etUsername.getText().toString())
@@ -70,6 +74,12 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
                                             user.put("name",etName.getText().toString());
                                             user.put("username",etUsername.getText().toString());
                                             user.put("password",etPassword.getText().toString());
+                                            user.put("reservword",etreservword.getText().toString());
+                                            limpiar();
+
+                                            // Obtener el estado del Switch y agregarlo al objeto Map
+                                            boolean isChecked = swAdmin.isChecked();
+                                            user.put("Role", isChecked);
                                             limpiar();
 
                                             // Add a new document with a generated ID
@@ -112,5 +122,6 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
         etUsername.setText("");
         etName.setText("");
         etPassword.setText("");
+        etreservword.setText("");
     }
 }
