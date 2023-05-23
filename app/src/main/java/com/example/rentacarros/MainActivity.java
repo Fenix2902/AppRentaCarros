@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etUsername, etPassword;
     Button btnIniciar, btnRegistrar;
+    Boolean Role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         btnIniciar = findViewById(R.id.btnIniciar);
         btnRegistrar = findViewById(R.id.btnRegistrarUser);
-
-
 
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,13 +55,22 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 if (task.getResult().size() > 0) {
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity_Opciones_de_Registro.class);
-                                    startActivity(intent);
+                                    DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                                    Role = document.getBoolean("Role");
+                                    if (Role != null){
+                                        if (Role){
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity_Opciones_de_Registro.class);
+                                        startActivity(intent);}
+                                    }else {
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity_Renta_Vehiculos.class);
+                                        startActivity(intent);
+                                    }
+
                                 } else {
                                     Toast.makeText(MainActivity.this, "Acceso de sesión no exitoso", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(MainActivity.this, "Acceso de sesión no exitoso", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Acceso de Sesión no exitoso", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

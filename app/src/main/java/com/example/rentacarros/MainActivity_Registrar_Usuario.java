@@ -28,7 +28,7 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText etUsername, etName, etPassword,etreservword;
-    Button btnVolverLogin, btnSave,btnListarUsers;
+    Button btnSave,btnListarUsers;
     Switch swAdmin;
 
     @SuppressLint("MissingInflatedId")
@@ -42,7 +42,6 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
         etName = findViewById(R.id.etRegName);
         etPassword = findViewById(R.id.etpassword);
         btnSave = findViewById(R.id.btnSaveUser);
-        btnVolverLogin = findViewById(R.id.btnRegresarLogin);
         btnListarUsers = findViewById(R.id.btnListUsers);
         etreservword = findViewById(R.id.etreservword);
         swAdmin = findViewById(R.id.switchRole);
@@ -89,7 +88,11 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
                                                         @Override
                                                         public void onSuccess(DocumentReference documentReference) {
                                                             Toast.makeText(getApplicationContext(), "Usuario creado correctamente", Toast.LENGTH_SHORT).show();
-                                                            //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                                            if(isChecked){
+                                                                startActivity(new Intent(getApplicationContext(),MainActivity_Registrar_Vehiculos.class));
+                                                            }else{
+                                                                startActivity(new Intent(getApplicationContext(),MainActivity_Renta_Vehiculos.class));
+                                                            }
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -107,13 +110,6 @@ public class MainActivity_Registrar_Usuario extends AppCompatActivity {
                 }else {
                     Toast.makeText(getApplicationContext(), "Debe ingresar todos los datos... ", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-        btnVolverLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //pasar a la actividad que muestra los usuarios
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));//permite ir a otra pagina
             }
         });
 
