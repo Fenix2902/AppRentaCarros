@@ -50,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -66,6 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Numero de Placa" />
+
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <EditText
@@ -82,18 +85,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />
 
     <Button
-        android:id="@+id/btnVolver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="32dp"
-        android:text="Volver"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDate" />
-
-    <Button
         android:id="@+id/btnSaveRenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,20 +93,29 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.706"
-        app:layout_constraintStart_toEndOf="@+id/btnVolver"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDate" />
 
     <Button
-        android:id="@+id/btnsearchrenta"
+        android:id="@+id/btnListarDisponibles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Buscar Renta"
+        android:text="Lista de Vehiculos Disponibles"
         android:textAlignment="center"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnVolver" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveRenta" />
+
+    <Button
+        android:id="@+id/btnCerrarSesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar Sesión"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnListarDisponibles" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.rentacarros;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,11 +29,12 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText etnumrenta, etusername,etnumplaca,etfecha;
-   Button btnVolver, btnSaveRent, btnsearch;
+   Button  btnSaveRent, btnListarVehic,btnCerrarsesion,btnsearch;
     String vieja_renta, buscar_id_renta;
 
     Boolean isChecked = true;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +46,16 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
         etnumplaca = findViewById(R.id.etnumplaca);
         etfecha = findViewById(R.id.etDate);
 
-        btnVolver = findViewById(R.id.btnVolver);
         btnSaveRent = findViewById(R.id.btnSaveRenta);
-        btnsearch = findViewById(R.id.btnsearchrenta);
+        btnListarVehic = findViewById(R.id.btnListarDisponibles);
+        btnCerrarsesion = findViewById(R.id.btnCerrarSesion);
 
+        btnListarVehic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MainActivity_VehiculosList.class));
+            }
+        });
         btnSaveRent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,14 +133,15 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                 }
             }
         });
-        btnVolver.setOnClickListener(new View.OnClickListener() {
+
+        btnCerrarsesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity_Opciones_de_Registro.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
-        btnsearch.setOnClickListener(new View.OnClickListener() {
+        /*btnsearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if  (!etnumrenta.getText().toString().isEmpty()){
@@ -159,7 +168,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Debe ingresar la identificacion de renta a buscar, intente de nuevo!!", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
     }
     private void limpiar() {

@@ -12,6 +12,15 @@
         android:theme="@style/Theme.RentaCarros"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity_RecuperarContrasena"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity_vehicItem"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity_VehiculosList"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity_userItem"
             android:exported="false" />
         <activity

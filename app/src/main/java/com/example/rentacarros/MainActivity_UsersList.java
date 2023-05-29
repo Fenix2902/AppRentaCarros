@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class MainActivity_UsersList extends AppCompatActivity {
     RecyclerView userRecycler;
-    ArrayList<Users>userlits;
+    ArrayList<Users> userlits;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
