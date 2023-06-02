@@ -7,8 +7,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,7 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -28,9 +32,11 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    EditText etnumrenta, etusername,etnumplaca,etfecha;
+    EditText etnumrenta, etusername,etnumplacas,etfecha;
    Button  btnSaveRent, btnListarVehic,btnCerrarsesion,btnsearch;
     String vieja_renta, buscar_id_renta;
+    List<String> aPlaca = new ArrayList<String>();
+    Spinner spplaca;
 
     Boolean isChecked = true;
 
@@ -43,7 +49,8 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
 
         etnumrenta = findViewById(R.id.etNoRenta);
         etusername = findViewById(R.id.etUser);
-        etnumplaca = findViewById(R.id.etnumplaca);
+        //etnumplaca = findViewById(R.id.etnumplaca);
+        spplaca = findViewById(R.id.spPlaca);
         etfecha = findViewById(R.id.etDate);
 
         btnSaveRent = findViewById(R.id.btnSaveRenta);
@@ -59,13 +66,13 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
         btnSaveRent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!etnumrenta.getText().toString().isEmpty() && !etusername.getText().toString().isEmpty() && !etnumplaca.getText().toString().isEmpty() && !etfecha.getText().toString().isEmpty()){
+                if (!etnumrenta.getText().toString().isEmpty() && !etusername.getText().toString().isEmpty() && !spplaca.getSelectedItem().toString().isEmpty() && !etfecha.getText().toString().isEmpty()){
                     db.collection("users").whereEqualTo("username", etusername.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 if (task.getResult().size() > 0) {
-                                    db.collection("Vehiculos").whereEqualTo("placa", etnumplaca.getText().toString()).whereEqualTo("estado", isChecked).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    db.collection("Vehiculos").whereEqualTo("placa", spplaca.getSelectedItem().toString()).whereEqualTo("estado", isChecked).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
@@ -91,7 +98,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                                                                     Map<String, Object> renta = new HashMap<>();
                                                                     renta.put("renta", etnumrenta.getText().toString());
                                                                     renta.put("usuario", etusername.getText().toString());
-                                                                    renta.put("placa", etnumplaca.getText().toString());
+                                                                    renta.put("placa", spplaca.getSelectedItem().toString());
                                                                     renta.put("fecha", etfecha.getText().toString());
                                                                     limpiar();
 
@@ -171,10 +178,29 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
         });*/
 
     }
+
+    private void loadRefs() {
+        db.collection("Vehiculos")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                aPlaca.add(document.getString("placa"));
+                            }
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity_Renta_Vehiculos.this, android.R.layout.simple_list_item_checked, aPlaca);
+                            spplaca.setAdapter(adapter);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error al cargar las referencias de vehículos", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
     private void limpiar() {
         etnumrenta.setText("");
         etusername.setText("");
-        etnumplaca.setText("");
+        spplaca.setSelection(0);
         etfecha.setText("");
     }
 
