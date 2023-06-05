@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,14 +29,15 @@ import java.util.List;
 import java.util.Map;
 
 
+
 public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    EditText etnumrenta, etusername,etnumplacas,etfecha;
+    EditText etnumrenta, etusername,etnumplacas,etfecha,etfechaDev;
    Button  btnSaveRent, btnListarVehic,btnCerrarsesion,btnsearch;
-    String vieja_renta, buscar_id_renta;
-    List<String> aPlaca = new ArrayList<String>();
+    //String vieja_renta, buscar_id_renta;
+
     Spinner spplaca;
 
     Boolean isChecked = true;
@@ -49,13 +51,14 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
 
         etnumrenta = findViewById(R.id.etNoRenta);
         etusername = findViewById(R.id.etUser);
-        //etnumplaca = findViewById(R.id.etnumplaca);
         spplaca = findViewById(R.id.spPlaca);
         etfecha = findViewById(R.id.etDate);
+        etfechaDev = findViewById(R.id.etDate2);
 
         btnSaveRent = findViewById(R.id.btnSaveRenta);
         btnListarVehic = findViewById(R.id.btnListarDisponibles);
         btnCerrarsesion = findViewById(R.id.btnCerrarSesion);
+
 
         btnListarVehic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +69,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
         btnSaveRent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!etnumrenta.getText().toString().isEmpty() && !etusername.getText().toString().isEmpty() && !spplaca.getSelectedItem().toString().isEmpty() && !etfecha.getText().toString().isEmpty()){
+                if (!etnumrenta.getText().toString().isEmpty() && !etusername.getText().toString().isEmpty() && !spplaca.getSelectedItem().toString().isEmpty() && !etfecha.getText().toString().isEmpty() && !etfechaDev.getText().toString().isEmpty()){
                     db.collection("users").whereEqualTo("username", etusername.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -100,6 +103,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                                                                     renta.put("usuario", etusername.getText().toString());
                                                                     renta.put("placa", spplaca.getSelectedItem().toString());
                                                                     renta.put("fecha", etfecha.getText().toString());
+                                                                    renta.put("fecha de Devolución", etfechaDev.getText().toString());
                                                                     limpiar();
 
                                                                     db.collection("Rentas").add(renta).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -176,20 +180,25 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                 }
             }
         });*/
-
+loadRefs();
     }
 
     private void loadRefs() {
         db.collection("Vehiculos")
+                .whereEqualTo("estado", isChecked)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            List<String> placas = new ArrayList<>();
+                            placas.add("Placas disponibles");
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                aPlaca.add(document.getString("placa"));
+                                String placa = document.getString("placa");
+                                placas.add(placa);
                             }
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity_Renta_Vehiculos.this, android.R.layout.simple_list_item_checked, aPlaca);
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity_Renta_Vehiculos.this, android.R.layout.simple_spinner_item, placas);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             spplaca.setAdapter(adapter);
                         } else {
                             Toast.makeText(getApplicationContext(), "Error al cargar las referencias de vehículos", Toast.LENGTH_SHORT).show();
@@ -202,6 +211,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
         etusername.setText("");
         spplaca.setSelection(0);
         etfecha.setText("");
+        etfechaDev.setText("");
     }
 
 }
