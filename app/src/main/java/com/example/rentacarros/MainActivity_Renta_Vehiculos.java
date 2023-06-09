@@ -19,13 +19,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -41,6 +47,10 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
     Spinner spplaca;
 
     Boolean isChecked = true;
+    Calendar calendar = Calendar.getInstance();
+    final int year = calendar.get(Calendar.YEAR);
+    final int month = calendar.get(Calendar.MONTH);
+    final int day = calendar.get(Calendar.DAY_OF_MONTH);
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -74,6 +84,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),MainActivity_devolucion.class));
             }
         });
+
         btnSaveRent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,62 +99,84 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 if (task.getResult().size() > 0) {
-
-                                                    task.getResult().getDocuments().get(0).getReference().update("estado", false).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            Toast.makeText(MainActivity_Renta_Vehiculos.this, "Se actualizo el estado del vehículo!!", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(MainActivity_Renta_Vehiculos.this, "No se actualizo el estado del vehículo!!", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-
+                                                    final DocumentSnapshot autoSnapshot = task.getResult().getDocuments().get(0);
                                                     db.collection("Rentas").whereEqualTo("renta", etnumrenta.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                            if(task.isSuccessful()){
-                                                                if(task.getResult().isEmpty()){
+                                                            if (task.isSuccessful()) {
+                                                                if (task.getResult().isEmpty()) {
                                                                     Map<String, Object> renta = new HashMap<>();
                                                                     renta.put("renta", etnumrenta.getText().toString());
                                                                     renta.put("usuario", etusername.getText().toString());
                                                                     renta.put("placa", spplaca.getSelectedItem().toString());
                                                                     renta.put("fecha", etfecha.getText().toString());
                                                                     renta.put("fecha de Devolución", etfechaDev.getText().toString());
-                                                                    limpiar();
-
+                                                                    String fechaInicialStr = etfecha.getText().toString();
+                                                                    String fechaFinalStr = etfechaDev.getText().toString();
+                                                                    Date fechaInicial = parseDate(fechaInicialStr);
+                                                                    Date fechaFinal = parseDate(fechaFinalStr);
+                                                                    Date fechaActual = new Date();
+                                                                    if (fechaInicial != null && fechaFinal != null) {
+                                                                        if (fechaInicial.before(fechaActual)) {
+                                                                            Toast.makeText(MainActivity_Renta_Vehiculos.this, "La fecha inicial no puede ser menor que la fecha actual", Toast.LENGTH_LONG).show();
+                                                                            return;
+                                                                        } else if (fechaFinal.before(fechaInicial)) {
+                                                                            Toast.makeText(MainActivity_Renta_Vehiculos.this, "La fecha final no puede ser anterior a la fecha inicial", Toast.LENGTH_LONG).show();
+                                                                            return;
+                                                                        }
+                                                                    } else {
+                                                                        Toast.makeText(MainActivity_Renta_Vehiculos.this, "Error interno", Toast.LENGTH_SHORT).show();
+                                                                        return;
+                                                                    }
                                                                     db.collection("Rentas").add(renta).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                        @Override
-                                                                        public void onSuccess(DocumentReference documentReference) {
-                                                                            Toast.makeText(getApplicationContext(), "Renta ingresada correctamente ", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                        @Override
-                                                                        public void onFailure(@NonNull Exception e) {
-                                                                            Toast.makeText(getApplicationContext(), "No se pudo realizar el registro: " + e, Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    });
+                                                                                @Override
+                                                                                public void onSuccess(DocumentReference documentReference) {
+                                                                                    Toast.makeText(getApplicationContext(), "Renta ingresada correctamente!", Toast.LENGTH_LONG).show();
+                                                                                    autoSnapshot.getReference().update("estado", false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                @Override
+                                                                                                public void onSuccess(Void unused) {
+                                                                                                    Toast.makeText(MainActivity_Renta_Vehiculos.this, "Se actualizó el estado del vehículo!!", Toast.LENGTH_SHORT).show();
+                                                                                                }
+                                                                                            })
+                                                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                                                @Override
+                                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                                    Toast.makeText(MainActivity_Renta_Vehiculos.this, "No se actualizó el estado del vehículo!!", Toast.LENGTH_SHORT).show();
+                                                                                                }
+                                                                                            });
+                                                                                    limpiar();
+                                                                                }
+                                                                            })
+                                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                    Toast.makeText(getApplicationContext(), "No se pudo realizar el registro", Toast.LENGTH_SHORT).show();
+                                                                                    limpiar();
+                                                                                }
+                                                                            });
                                                                 } else {
                                                                     Toast.makeText(getApplicationContext(), "Usuario existente, ingrese uno nuevo!!", Toast.LENGTH_SHORT).show();
+                                                                    limpiar();
                                                                 }
                                                             }
                                                         }
                                                     });
                                                 } else {
-                                                    Toast.makeText(getApplicationContext(), "Placa no disponible", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getApplicationContext(), "Debes ingresar los autos disponibles para rentar!", Toast.LENGTH_SHORT).show();
                                                 }
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Placa no disponible", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "Placa no disponible 1", Toast.LENGTH_SHORT).show();
+                                                limpiar();
                                             }
                                         }
                                     });
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Usuario no disponible para realizar renta", Toast.LENGTH_SHORT).show();
+                                    limpiar();
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Usuario no disponible para realizar renta", Toast.LENGTH_SHORT).show();
+                                limpiar();
                             }
                         }
                     });
@@ -160,34 +193,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
             }
         });
 
-        /*btnsearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if  (!etnumrenta.getText().toString().isEmpty()){
-                    db.collection("Rentas").whereEqualTo("renta", etnumrenta.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()){
-                                if (!task.getResult().isEmpty()){
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        vieja_renta = document.getString("renta");
-                                        buscar_id_renta = document.getId();
-                                        etusername.setText(document.getString("usuario"));
-                                        etnumplaca.setText(document.getString("placa"));
-                                        etfecha.setText(document.getString("fecha"));
-                                        Toast.makeText(getApplicationContext(), "Codigo de renta: " + buscar_id_renta, Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Renta no existe, intente de nuevo!!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Debe ingresar la identificacion de renta a buscar, intente de nuevo!!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
+
 loadRefs();
     }
 
@@ -220,6 +226,16 @@ loadRefs();
         spplaca.setSelection(0);
         etfecha.setText("");
         etfechaDev.setText("");
+    }
+
+    private Date parseDate(String dateStr) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        try {
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
