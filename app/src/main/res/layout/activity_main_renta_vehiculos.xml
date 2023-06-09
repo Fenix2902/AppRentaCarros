@@ -10,7 +10,7 @@
         android:id="@+id/textView5"
         android:layout_width="234dp"
         android:layout_height="30dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="110dp"
         android:text="Renta Vehiculos"
         android:textAlignment="center"
         android:textAllCaps="true"
@@ -100,7 +100,7 @@
         android:id="@+id/etDate2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Fecha de Devolución"
         android:inputType="date"
@@ -114,7 +114,7 @@
         android:id="@+id/btnSaveRenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="32dp"
         android:text="Guardar"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -131,7 +131,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSaveRenta" />
+        app:layout_constraintTop_toBottomOf="@+id/btndevolucionRenta" />
 
     <Button
         android:id="@+id/btnCerrarSesion"
@@ -143,5 +143,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnListarDisponibles" />
+
+    <Button
+        android:id="@+id/btndevolucionRenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Devolución Vehiculo Rentado"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveRenta" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

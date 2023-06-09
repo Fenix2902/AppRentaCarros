@@ -35,7 +35,7 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText etnumrenta, etusername,etnumplacas,etfecha,etfechaDev;
-   Button  btnSaveRent, btnListarVehic,btnCerrarsesion,btnsearch;
+   Button  btnSaveRent, btnListarVehic,btnCerrarsesion,btnsearch,btndevolucionrenta;
     //String vieja_renta, buscar_id_renta;
 
     Spinner spplaca;
@@ -58,12 +58,20 @@ public class MainActivity_Renta_Vehiculos extends AppCompatActivity {
         btnSaveRent = findViewById(R.id.btnSaveRenta);
         btnListarVehic = findViewById(R.id.btnListarDisponibles);
         btnCerrarsesion = findViewById(R.id.btnCerrarSesion);
+        btndevolucionrenta = findViewById(R.id.btndevolucionRenta);
 
 
         btnListarVehic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), MainActivity_VehiculosList.class));
+            }
+        });
+
+        btndevolucionrenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MainActivity_devolucion.class));
             }
         });
         btnSaveRent.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +200,7 @@ loadRefs();
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             List<String> placas = new ArrayList<>();
-                            placas.add("Placas disponibles");
+                            placas.add("Selecciona Placa");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String placa = document.getString("placa");
                                 placas.add(placa);

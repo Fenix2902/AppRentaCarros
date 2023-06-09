@@ -27,7 +27,7 @@ public class MainActivity_Registrar_Vehiculos extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Button btnRegresar, btnSave;
-    EditText etplaca, etmarca;
+    EditText etplaca, etmarca, etvalorDia;
 
     Switch swdisponible;
 
@@ -42,6 +42,7 @@ public class MainActivity_Registrar_Vehiculos extends AppCompatActivity {
 
         etmarca = findViewById(R.id.etMarcaVeh);
         etplaca = findViewById(R.id.etPlaca);
+        etvalorDia = findViewById(R.id.etvalordia);
 
         swdisponible = findViewById(R.id.swDispo);
 
@@ -49,7 +50,7 @@ public class MainActivity_Registrar_Vehiculos extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Verificar que el nombre del usuario se haya digitado
-                if (!etplaca.getText().toString().isEmpty() && !etmarca.getText().toString().isEmpty()){
+                if (!etplaca.getText().toString().isEmpty() && !etmarca.getText().toString().isEmpty() && !etvalorDia.getText().toString().isEmpty()){
                     //Busqueda de usuario en la coleccion users
                     db.collection("Vehiculos")
                             .whereEqualTo("placa",etplaca.getText().toString())
@@ -64,6 +65,7 @@ public class MainActivity_Registrar_Vehiculos extends AppCompatActivity {
                                             Map<String, Object> vehiculo = new HashMap<>();
                                             vehiculo.put("placa",etplaca.getText().toString());
                                             vehiculo.put("marca",etmarca.getText().toString());
+                                            vehiculo.put("Valor Día",etvalorDia.getText().toString());
                                             limpiar();
 
                                             // Obtener el estado del Switch y agregarlo al objeto Map
@@ -110,5 +112,6 @@ public class MainActivity_Registrar_Vehiculos extends AppCompatActivity {
     private void limpiar() {
         etplaca.setText("");
         etmarca.setText("");
+        etvalorDia.setText("");
     }
 }
